@@ -5,6 +5,7 @@ class CreateRestaurants < ActiveRecord::Migration
       t.integer :rating
 
       t.timestamps null: false
+
     end
   end
 end
