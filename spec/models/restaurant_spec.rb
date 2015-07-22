@@ -1,7 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Restaurant, type: :model do
+  
   it { is_expected.to have_many(:reviews).dependent(:destroy) }
+  
+  it { should belong_to(:user) }
 
   it 'is not valid with a name of less than three characters' do
     restaurant = Restaurant.new(name: "kf")
