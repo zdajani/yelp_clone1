@@ -22,36 +22,43 @@ feature 'restaurants' do
     end
   end
 
-    scenario 'must be logged in' do
-      visit '/restaurants'
-      click_link 'Add a restaurant'
-      expect(page).to have_content 'You need to sign in or sign up before continuing'
-    end
+
 
   context 'creating restaurants' do
+    
+    context 'user must be logged in' do
+    
+      before do
+        user = User.create email: 'tansaku@gmail.com', password: '12345678', password_confirmation: '12345678'
+        login_as user
+      end
 
-    before do
-      user = User.create email: 'tansaku@gmail.com', password: '12345678', password_confirmation: '12345678'
-      login_as user
-    end
-
-    scenario 'prompts user to fill out a form, then displays the new restaurant' do
-      visit '/restaurants'
-      click_link 'Add a restaurant'
-      fill_in 'Name', with: 'KFC'
-      click_button 'Create Restaurant'
-      expect(page).to have_content 'KFC'
-      expect(current_path).to eq '/restaurants'
-    end
-
-    context 'an invalid restaurant' do
-      it 'does not let you submit a name that is too short' do
+      scenario 'prompts user to fill out a form, then displays the new restaurant' do
         visit '/restaurants'
         click_link 'Add a restaurant'
-        fill_in 'Name', with: 'kf'
+        fill_in 'Name', with: 'KFC'
         click_button 'Create Restaurant'
-        expect(page).not_to have_css 'h2', text: 'kf'
-        expect(page).to have_content 'error'
+        expect(page).to have_content 'KFC'
+        expect(current_path).to eq '/restaurants'
+      end
+
+      context 'an invalid restaurant' do
+        it 'does not let you submit a name that is too short' do
+          visit '/restaurants'
+          click_link 'Add a restaurant'
+          fill_in 'Name', with: 'kf'
+          click_button 'Create Restaurant'
+          expect(page).not_to have_css 'h2', text: 'kf'
+          expect(page).to have_content 'error'
+        end
+      end
+    end
+    
+    context 'user not logged in' do
+      it 'does not let you create a restaurant' do
+        visit '/restaurants'
+        click_link 'Add a restaurant'
+        expect(page).to have_content 'You need to sign in or sign up before continuing'
       end
     end
   end

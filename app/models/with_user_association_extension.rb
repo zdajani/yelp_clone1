@@ -13,9 +13,4 @@ module WithUserAssociationExtension
     attributes[:user] ||= user
     build(attributes)
   end
-  
-  # def destroy_with_user(attributes = {}, user)
-  #   attributes[:user] ||= user
-  #   build(attributes)
-  # end
 end
